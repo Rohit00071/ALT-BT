@@ -11,8 +11,41 @@
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1,
       "position": [
-        100,
+        0,
         300
+      ]
+    },
+    {
+      "parameters": {
+        "dataType": "string",
+        "value1": "={{$node[\"Telegram Trigger\"].json[\"message\"][\"text\"]}}",
+        "rules": {
+          "rules": [
+            {
+              "value2": "/start"
+            }
+          ]
+        }
+      },
+      "name": "Is Start Command?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        200,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{$node[\"Telegram Trigger\"].json[\"message\"][\"chat\"][\"id\"]}}",
+        "text": "👋 Welcome to the Math Video Generator!\n\nSimply send me any math concept (e.g., \"Pythagorean Theorem\" or \"Circle Area\") and I will create a beautiful animation for you!"
+      },
+      "name": "Welcome Message",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        400,
+        150
       ]
     },
     {
@@ -24,8 +57,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1,
       "position": [
-        300,
-        300
+        400,
+        450
       ]
     },
     {
@@ -51,8 +84,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
-        500,
-        300
+        600,
+        450
       ]
     },
     {
@@ -65,8 +98,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
-        700,
-        300
+        800,
+        450
       ]
     },
     {
@@ -81,14 +114,32 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1,
       "position": [
-        900,
-        300
+        1000,
+        450
       ]
     }
   ],
   "connections": {
     "Telegram Trigger": {
       "main": [
+        [
+          {
+            "node": "Is Start Command?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Start Command?": {
+      "main": [
+        [
+          {
+            "node": "Welcome Message",
+            "type": "main",
+            "index": 0
+          }
+        ],
         [
           {
             "node": "Immediate Response",
