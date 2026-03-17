@@ -107,7 +107,8 @@
       "parameters": {
         "operation": "sendVideo",
         "chatId": "={{$node[\"Telegram Trigger\"].json[\"message\"][\"chat\"][\"id\"]}}",
-        "video": "data",
+        "binaryFile": true,
+        "binaryPropertyName": "data",
         "caption": "Your math visualization is ready! 🚀",
         "additionalFields": {}
       },
