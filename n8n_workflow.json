@@ -1,0 +1,110 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "math-bot",
+        "options": {}
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        250,
+        300
+      ],
+      "webhookId": "math-bot-webhook"
+    },
+    {
+      "parameters": {
+        "from": "YOUR_TWILIO_NUMBER",
+        "to": "={{$node[\"Webhook\"].json[\"body\"][\"From\"]}}",
+        "message": "I'm analyzing your question and rendering a visualization. Give me about 45 seconds! 🎬"
+      },
+      "name": "Immediate Response",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        450,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://alt-bt-api.onrender.com/api/generate_video",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "concept",
+              "value": "={{$node[\"Webhook\"].json[\"body\"][\"Body\"]}}"
+            },
+            {
+              "name": "language",
+              "value": "English"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Generate Video",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        650,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "from": "YOUR_TWILIO_NUMBER",
+        "to": "={{$node[\"Webhook\"].json[\"body\"][\"From\"]}}",
+        "message": "Your math visualization is ready! 🚀",
+        "mediaUrl": "={{$node[\"Generate Video\"].json[\"video_url\"].startsWith('http') ? $node[\"Generate Video\"].json[\"video_url\"] : 'https://alt-bt-api.onrender.com' + $node[\"Generate Video\"].json[\"video_url\"]}}"
+      },
+      "name": "Deliver Video",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        850,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Immediate Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Immediate Response": {
+      "main": [
+        [
+          {
+            "node": "Generate Video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Video": {
+      "main": [
+        [
+          {
+            "node": "Deliver Video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
