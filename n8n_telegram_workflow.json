@@ -1,0 +1,107 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1,
+      "position": [
+        200,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{$node[\"Telegram Trigger\"].json[\"message\"][\"chat\"][\"id\"]}}",
+        "text": "I'm analyzing your question and rendering a visualization. Give me about 45 seconds! 🎬"
+      },
+      "name": "Immediate Response",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        400,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://alt-bt-api.onrender.com/api/generate_video",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "concept",
+              "value": "={{$node[\"Telegram Trigger\"].json[\"message\"][\"text\"]}}"
+            },
+            {
+              "name": "language",
+              "value": "English"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Generate Video",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        600,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{$node[\"Telegram Trigger\"].json[\"message\"][\"chat\"][\"id\"]}}",
+        "text": "Your math visualization is ready! 🚀\n\nDownload link: {{$node[\"Generate Video\"].json[\"video_url\"].startsWith('http') ? $node[\"Generate Video\"].json[\"video_url\"] : 'https://alt-bt-api.onrender.com' + $node[\"Generate Video\"].json[\"video_url\"]}}"
+      },
+      "name": "Deliver Video Link",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        800,
+        250
+      ]
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Immediate Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Immediate Response": {
+      "main": [
+        [
+          {
+            "node": "Generate Video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Video": {
+      "main": [
+        [
+          {
+            "node": "Deliver Video Link",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
