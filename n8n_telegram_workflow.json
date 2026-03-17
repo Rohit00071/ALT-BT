@@ -17,11 +17,11 @@
     },
     {
       "parameters": {
-        "dataType": "string",
-        "value1": "={{$node[\"Telegram Trigger\"].json[\"message\"][\"text\"]}}",
         "rules": {
-          "rules": [
+          "values": [
             {
+              "value1": "={{$node[\"Telegram Trigger\"].json[\"message\"][\"text\"]}}",
+              "operation": "equal",
               "value2": "/start"
             }
           ]
