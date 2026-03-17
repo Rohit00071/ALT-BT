@@ -140,6 +140,11 @@ These are planned enhancements (not implemented yet):
 - No persistent storage — generated videos are ephemeral
 - Free-tier API rate limits apply (Gemini: ~15 RPM, Groq: ~30 RPM)
 
-## 📄 License
+## ☁️ Deployment
 
+You can deploy this project to [Render](https://render.com/) with one click using the Blueprint below:
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Rohit00071/ALT-BT)
+
+## 📄 License
 MIT — free for any use.

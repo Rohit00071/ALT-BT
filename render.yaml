@@ -1,0 +1,29 @@
+services:
+  # Backend Web Service (Docker)
+  - type: web
+    name: alt-bt-api
+    runtime: docker
+    envVars:
+      - key: LLM_PROVIDER
+        value: groq
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: VIDEO_OUTPUT_DIR
+        value: /app/videos
+      - key: TEMP_SCENE_DIR
+        value: /app/tmp_scenes
+
+  # Frontend Web Service (Next.js)
+  - type: web
+    name: alt-bt-ui
+    runtime: node
+    buildCommand: cd frontend && npm install && npm run build
+    startCommand: cd frontend && npm run start
+    envVars:
+      - key: NEXT_PUBLIC_API_BASE_URL
+        fromService:
+          name: alt-bt-api
+          type: web
+          property: host

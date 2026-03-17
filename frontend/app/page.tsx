@@ -81,7 +81,8 @@ export default function Home() {
         setStatusText("🎬 Rendering your animation with Manim…");
       }, 5000);
 
-      const response = await axios.post<ApiResponse>("http://127.0.0.1:8000/api/generate_video", {
+      const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
+      const response = await axios.post<ApiResponse>(`${apiBaseUrl}/api/generate_video`, {
         concept: data.concept.trim(),
         language: data.language,
       });
@@ -89,7 +90,10 @@ export default function Home() {
       clearTimeout(progressTimer);
 
       if (response.data.status === "success" && response.data.video_url) {
-        setVideoUrl(response.data.video_url);
+        const fullVideoUrl = response.data.video_url.startsWith("http")
+          ? response.data.video_url
+          : `${apiBaseUrl}${response.data.video_url}`;
+        setVideoUrl(fullVideoUrl);
         setStatusText("");
         // Auto scroll to video
         setTimeout(() => {

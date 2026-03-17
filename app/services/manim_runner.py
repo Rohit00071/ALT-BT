@@ -50,9 +50,15 @@ def render_scene(code: str) -> str:
     # -ql = low quality (480p) for fast rendering
     # --media_dir = output directory
     # -o = output filename
-    # The manim executable might not be in the PATH when running via subprocess on Windows.
-    # We use the absolute path confirmed on this system.
-    manim_cmd = "C:\\Users\\Admin\\AppData\\Local\\Programs\\Python\\Python312\\Scripts\\manim.EXE"
+    # Determine the manim command. 
+    # In production/Docker/Linux, 'manim' should be in the PATH.
+    # On the current local Windows machine, we use the absolute path.
+    manim_cmd = "manim"
+    import os
+    if os.name == 'nt': # Windows
+        windows_path = "C:\\Users\\Admin\\AppData\\Local\\Programs\\Python\\Python312\\Scripts\\manim.EXE"
+        if os.path.exists(windows_path):
+            manim_cmd = windows_path
     
     cmd = [
         manim_cmd,
