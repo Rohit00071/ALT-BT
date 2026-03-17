@@ -25,9 +25,10 @@
               "value2": "/start"
             }
           ]
-        }
+        },
+        "fallbackOutput": 1
       },
-      "name": "Is Start Command?",
+      "name": "Route Message",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
@@ -38,26 +39,26 @@
     {
       "parameters": {
         "chatId": "={{$node[\"Telegram Trigger\"].json[\"message\"][\"chat\"][\"id\"]}}",
-        "text": "👋 Welcome to the Math Video Generator!\n\nSimply send me any math concept (e.g., \"Pythagorean Theorem\" or \"Circle Area\") and I will create a beautiful animation for you!"
+        "text": "👋 Welcome to the Math Video Generator!\n\nSimply send me any math concept (e.g., \"Pythagorean Theorem\") and I will create a beautiful animation for you!"
       },
       "name": "Welcome Message",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1,
       "position": [
-        400,
+        450,
         150
       ]
     },
     {
       "parameters": {
         "chatId": "={{$node[\"Telegram Trigger\"].json[\"message\"][\"chat\"][\"id\"]}}",
-        "text": "I'm analyzing your question and rendering a visualization. Give me about 45 seconds! 🎬"
+        "text": "🎬 I'm analyzing your question and rendering a visualization. This usually takes about 45-60 seconds. Please hang tight!"
       },
       "name": "Immediate Response",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1,
       "position": [
-        400,
+        450,
         450
       ]
     },
@@ -84,7 +85,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
-        600,
+        650,
         450
       ]
     },
@@ -98,7 +99,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
-        800,
+        850,
         450
       ]
     },
@@ -114,7 +115,7 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1,
       "position": [
-        1000,
+        1050,
         450
       ]
     }
@@ -124,14 +125,14 @@
       "main": [
         [
           {
-            "node": "Is Start Command?",
+            "node": "Route Message",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Is Start Command?": {
+    "Route Message": {
       "main": [
         [
           {
