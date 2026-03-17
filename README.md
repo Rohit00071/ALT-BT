@@ -1,4 +1,4 @@
-# AI-Powered Manim Animator 🎬✨
+# AI-Powered Manim Animator 🎬
 
 Generate beautiful educational math animation videos using AI and [Manim](https://www.manim.community/). Type a math concept, choose a language, and watch AI create an animation in seconds.
 
