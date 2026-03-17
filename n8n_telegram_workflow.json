@@ -11,7 +11,7 @@
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1,
       "position": [
-        200,
+        100,
         300
       ]
     },
@@ -24,7 +24,7 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1,
       "position": [
-        400,
+        300,
         300
       ]
     },
@@ -51,21 +51,38 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
-        600,
+        500,
         300
       ]
     },
     {
       "parameters": {
-        "chatId": "={{$node[\"Telegram Trigger\"].json[\"message\"][\"chat\"][\"id\"]}}",
-        "text": "Your math visualization is ready! 🚀\n\nDownload link: {{$node[\"Generate Video\"].json[\"video_url\"].startsWith('http') ? $node[\"Generate Video\"].json[\"video_url\"] : 'https://alt-bt-api.onrender.com' + $node[\"Generate Video\"].json[\"video_url\"]}}"
+        "url": "={{$node[\"Generate Video\"].json[\"video_url\"].startsWith('http') ? $node[\"Generate Video\"].json[\"video_url\"] : 'https://alt-bt-api.onrender.com' + $node[\"Generate Video\"].json[\"video_url\"]}}",
+        "responseFormat": "file",
+        "options": {}
       },
-      "name": "Deliver Video Link",
+      "name": "Download Video",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        700,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "sendVideo",
+        "chatId": "={{$node[\"Telegram Trigger\"].json[\"message\"][\"chat\"][\"id\"]}}",
+        "video": "data",
+        "caption": "Your math visualization is ready! 🚀",
+        "additionalFields": {}
+      },
+      "name": "Send Video File",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1,
       "position": [
-        800,
-        250
+        900,
+        300
       ]
     }
   ],
@@ -96,7 +113,18 @@
       "main": [
         [
           {
-            "node": "Deliver Video Link",
+            "node": "Download Video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Video": {
+      "main": [
+        [
+          {
+            "node": "Send Video File",
             "type": "main",
             "index": 0
           }
