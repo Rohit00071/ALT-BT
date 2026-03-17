@@ -91,32 +91,17 @@
     },
     {
       "parameters": {
-        "url": "={{$node[\"Generate Video\"].json[\"video_url\"].startsWith('http') ? $node[\"Generate Video\"].json[\"video_url\"] : 'https://alt-bt-api.onrender.com' + $node[\"Generate Video\"].json[\"video_url\"]}}",
-        "responseFormat": "file",
-        "options": {}
-      },
-      "name": "Download Video",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.1,
-      "position": [
-        850,
-        450
-      ]
-    },
-    {
-      "parameters": {
         "operation": "sendVideo",
         "chatId": "={{$node[\"Telegram Trigger\"].json[\"message\"][\"chat\"][\"id\"]}}",
-        "binaryFile": true,
-        "binaryPropertyName": "data",
+        "video": "={{$node[\"Generate Video\"].json[\"video_url\"].startsWith('http') ? $node[\"Generate Video\"].json[\"video_url\"] : 'https://alt-bt-api.onrender.com' + $node[\"Generate Video\"].json[\"video_url\"]}}",
         "caption": "Your math visualization is ready! 🚀",
         "additionalFields": {}
       },
-      "name": "Send Video File",
+      "name": "Send Video",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1,
       "position": [
-        1050,
+        850,
         450
       ]
     }
@@ -166,18 +151,7 @@
       "main": [
         [
           {
-            "node": "Download Video",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Download Video": {
-      "main": [
-        [
-          {
-            "node": "Send Video File",
+            "node": "Send Video",
             "type": "main",
             "index": 0
           }
